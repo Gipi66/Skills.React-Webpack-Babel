@@ -1,29 +1,23 @@
-const webpack = require('webpack');
+const path = require('path');
+const HWP = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: ['babel-loader']
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['*', '.js', '.jsx']
-    },
+    entry: path.join(__dirname, '/src/index.js'),
     output: {
-        path: __dirname + '/dist',
-        publicPath: '/',
-        filename: 'bundle.js'
+        filename: 'build.js',
+        path: path.join(__dirname, '/dist')
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
+        }]
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new HWP(
+            {template: path.join(__dirname, '/src/index.html')}
+        )
     ],
-    devServer: {
-        contentBase: './dist',
-        hot: true
-    }
+    watch: true
 };
